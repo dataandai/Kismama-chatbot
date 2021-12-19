@@ -19,11 +19,20 @@ askButton.addEventListener('click', ()=>{
   popup.classList.toggle('show');
 })
 
-// Send message  -> (enter key not working yet)
-submitBtn.addEventListener('click', ()=>{
+// Send message with click
+submitBtn.addEventListener('click', getUserInput);
+// Send message with enter ( html -> <input ... onkeyup="inputKeyUp(event)" )
+function inputKeyUp(e) {
+  e.which = e.which || e.keyCode;
+  if(e.which == 13) {
+      getUserInput();
+  }
+}
 
-    let userInput = inputElm.value;
+function getUserInput()
+{
 
+  let userInput = inputElm.value;
     if(userInput != "")
     {
       let temp = `<div class="out-msg">
@@ -31,33 +40,21 @@ submitBtn.addEventListener('click', ()=>{
       <img src="./static/images/Woman_Icon2X.png" class="avatar">
       </div>`;
         
-  
       chatArea.insertAdjacentHTML("beforeend", temp);
       inputElm.value = "";
+
       getEntities(userInput);
-      
     }
-})
+}
 
-//ENTER
-/*
-submitBtn.addEventListener("keypress", function (event) {
+function GiveAnswer(text) {
+  let answer = `<div class="income-msg">
+    <img src="/static/images/robotChatface2X.png" class="avatar" alt="">
+    <span class="msg">${text}</span>
+    </div>`;
+  chatArea.insertAdjacentHTML("beforeend", answer);
 
-  let userInput = inputElm.value;
-
-  let temp = `<div class="out-msg">
-      <span class="my-msg">${userInput}</span>
-      <img src="/static/images/Woman_Icon2X.png" class="avatar">
-      </div>`;
-
-  if (userInput != "" && event.key === 'Enter') {
-    chatArea.insertAdjacentHTML("beforeend", temp);
-    getEntities(userInput);
-    inputElm.value = "";
-  }
-}) */
-
-//template code
+}
 
 function replaceText(ents) {
     text = "";
@@ -77,16 +74,6 @@ function replaceText(ents) {
     }
     GiveAnswer(text);
 }
-
-function GiveAnswer(text) {
-  let answer = `<div class="income-msg">
-    <img src="/static/images/robotChatface2X.png" class="avatar" alt="">
-    <span class="msg">${text}</span>
-    </div>`;
-  chatArea.insertAdjacentHTML("beforeend", answer);
-
-}
-
 
 function getEntities(text) {
     const options = {
